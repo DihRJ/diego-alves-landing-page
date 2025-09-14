@@ -77,7 +77,8 @@ def add_portfolio_link():
         title=data.get('title') or metadata['title'],
         url=url,
         description=data.get('description') or metadata['description'],
-        image_url=data.get('image_url') or metadata['image_url']
+        image_url=data.get('image_url') or metadata['image_url'],
+        pdf_url=data.get('pdf_url')  # Adicionar suporte ao PDF
     )
     
     try:
@@ -103,6 +104,8 @@ def update_portfolio_link(link_id):
         link.description = data['description']
     if 'image_url' in data:
         link.image_url = data['image_url']
+    if 'pdf_url' in data:
+        link.pdf_url = data['pdf_url']
     if 'is_active' in data:
         link.is_active = data['is_active']
     
