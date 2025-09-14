@@ -15,7 +15,7 @@ from src.routes.pdf_upload import pdf_upload_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
-CORS(app)
+CORS(app, supports_credentials=True)
 
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(portfolio_bp, url_prefix='/api')
