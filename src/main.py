@@ -38,6 +38,19 @@ with app.app_context():
         db.session.commit()
         print("✅ Admin criado: diego / diego123")
 
+@app.route('/admin')
+def admin_panel():
+    """Rota específica para o painel administrativo"""
+    static_folder_path = app.static_folder
+    if static_folder_path is None:
+        return "Static folder not configured", 404
+    
+    index_path = os.path.join(static_folder_path, 'index.html')
+    if os.path.exists(index_path):
+        return send_from_directory(static_folder_path, 'index.html')
+    else:
+        return "index.html not found", 404
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
