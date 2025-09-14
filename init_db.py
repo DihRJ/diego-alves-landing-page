@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from src.models.user import db
 from src.models.admin import Admin
+from src.routes.pdf_standalone import StandalonePDF
 from src.main import app
 
 def init_database():

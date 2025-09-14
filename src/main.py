@@ -12,6 +12,7 @@ from src.routes.user import user_bp
 from src.routes.portfolio import portfolio_bp
 from src.routes.auth import auth_bp
 from src.routes.pdf_upload import pdf_upload_bp
+from src.routes.pdf_standalone import pdf_standalone_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
@@ -21,6 +22,7 @@ app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(portfolio_bp, url_prefix='/api')
 app.register_blueprint(auth_bp, url_prefix='/api')
 app.register_blueprint(pdf_upload_bp, url_prefix='/api')
+app.register_blueprint(pdf_standalone_bp, url_prefix='/api')
 
 # uncomment if you need to use database
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
