@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diego Alves - Administração</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold text-gray-900">Administração do Portfólio</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">Olá, diego</span>
+                    <button onclick="window.location.href='/'" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar ao Site
+                    </button>
+                    <button onclick="logout()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-sign-out-alt mr-2"></i>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <!-- Tabs -->
+        <div class="mb-6">
+            <nav class="flex space-x-8" aria-label="Tabs">
+                <button onclick="showTab('portfolio')" id="tab-portfolio" class="tab-button active whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                    <i class="fas fa-link mr-2"></i>
+                    Gerenciar Portfólio
+                </button>
+                <button onclick="showTab('pdfs')" id="tab-pdfs" class="tab-button whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerenciar PDFs
+                </button>
+            </nav>
+        </div>
+
+        <!-- Portfolio Tab -->
+        <div id="content-portfolio" class="tab-content">
+            <!-- Add Link Form -->
+            <div class="bg-white shadow rounded-lg mb-6">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Adicionar Novo Link</h3>
+                    <form id="linkForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="linkTitle" class="block text-sm font-medium text-gray-700">Título</label>
+                                <input type="text" id="linkTitle" name="title" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                            <div>
+                                <label for="linkUrl" class="block text-sm font-medium text-gray-700">URL</label>
+                                <input type="url" id="linkUrl" name="url" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="linkDescription" class="block text-sm font-medium text-gray-700">Descrição</label>
+                            <textarea id="linkDescription" name="description" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-plus mr-2"></i>
+                            Adicionar Link
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Links List -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Links do Portfólio</h3>
+                    <div id="linksList" class="space-y-4">
+                        <!-- Links will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDFs Tab -->
+        <div id="content-pdfs" class="tab-content hidden">
+            <!-- Upload PDF Form -->
+            <div class="bg-white shadow rounded-lg mb-6">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Upload de PDF</h3>
+                    <p class="text-sm text-gray-600 mb-4">Envie um novo PDF com título e descrição</p>
+                    <form id="pdfForm" class="space-y-4">
+                        <div>
+                            <label for="pdfTitle" class="block text-sm font-medium text-gray-700">Título *</label>
+                            <input type="text" id="pdfTitle" name="title" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="pdfDescription" class="block text-sm font-medium text-gray-700">Descrição</label>
+                            <textarea id="pdfDescription" name="description" rows="3" placeholder="Descrição do PDF (opcional)" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label for="pdfFile" class="block text-sm font-medium text-gray-700">Arquivo PDF *</label>
+                            <input type="file" id="pdfFile" name="pdf" accept=".pdf" required class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            <p class="mt-1 text-sm text-gray-500">Máximo 16MB</p>
+                        </div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-upload mr-2"></i>
+                            Enviar PDF
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- PDFs List -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">PDFs Cadastrados</h3>
+                    <div id="pdfsList" class="space-y-4">
+                        <!-- PDFs will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50"></div>
+
+    <style>
+        .tab-button.active {
+            border-color: #3B82F6;
+            color: #3B82F6;
+        }
+        .tab-button:not(.active) {
+            border-color: transparent;
+            color: #6B7280;
+        }
+        .tab-button:not(.active):hover {
+            color: #374151;
+            border-color: #D1D5DB;
+        }
+        input, textarea, select {
+            border: 1px solid #D1D5DB;
+            padding: 0.5rem 0.75rem;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+
+    <script>
+        // Global variables
+        let currentEditingPdf = null;
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // Message functionality
+        function showMessage(message, type = 'success') {
+            const container = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            
+            const bgColor = type === 'error' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200';
+            const textColor = type === 'error' ? 'text-red-700' : 'text-green-700';
+            
+            messageDiv.className = `${bgColor} border ${textColor} px-4 py-3 rounded mb-4 shadow-lg max-w-sm`;
+            messageDiv.innerHTML = `
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">${message}</p>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        // API calls
+        async function apiCall(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    credentials: 'include',
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Erro na requisição');
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        // Portfolio functions
+        async function loadPortfolioLinks() {
+            try {
+                const links = await apiCall('/api/portfolio/admin/links');
+                const container = document.getElementById('linksList');
+                
+                if (links.length === 0) {
+                    container.innerHTML = '<p class="text-center text-gray-500 py-8">Nenhum link cadastrado</p>';
+                    return;
+                }
+                
+                container.innerHTML = links.map(link => `
+                    <div class="flex items-center justify-between p-4 border rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-medium">${link.title}</h4>
+                            <p class="text-sm text-gray-500">${link.url}</p>
+                            ${link.description ? `<p class="text-sm text-gray-600 mt-1">${link.description}</p>` : ''}
+                            ${link.pdf_url ? '<p class="text-sm text-blue-600 mt-1"><i class="fas fa-file-pdf mr-1"></i>PDF associado</p>' : ''}
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="window.open('${link.url}', '_blank')" class="p-2 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="deleteLink(${link.id})" class="p-2 text-red-400 hover:text-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                showMessage('Erro ao carregar links: ' + error.message, 'error');
+            }
+        }
+
+        async function addLink(formData) {
+            try {
+                await apiCall('/api/portfolio/links', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                showMessage('Link adicionado com sucesso!');
+                document.getElementById('linkForm').reset();
+                loadPortfolioLinks();
+            } catch (error) {
+                showMessage('Erro ao adicionar link: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteLink(id) {
+            if (!confirm('Tem certeza que deseja excluir este link?')) return;
+            
+            try {
+                await apiCall(`/api/portfolio/links/${id}`, { method: 'DELETE' });
+                showMessage('Link removido com sucesso!');
+                loadPortfolioLinks();
+            } catch (error) {
+                showMessage('Erro ao remover link: ' + error.message, 'error');
+            }
+        }
+
+        // PDF functions
+        async function loadStandalonePdfs() {
+            try {
+                const pdfs = await apiCall('/api/pdfs/standalone');
+                const container = document.getElementById('pdfsList');
+                
+                if (pdfs.length === 0) {
+                    container.innerHTML = '<p class="text-center text-gray-500 py-8">Nenhum PDF cadastrado</p>';
+                    return;
+                }
+                
+                container.innerHTML = pdfs.map(pdf => `
+                    <div class="p-4 border rounded-lg" id="pdf-${pdf.id}">
+                        ${currentEditingPdf === pdf.id ? renderEditPdfForm(pdf) : renderPdfDisplay(pdf)}
+                    </div>
+                `).join('');
+            } catch (error) {
+                showMessage('Erro ao carregar PDFs: ' + error.message, 'error');
+            }
+        }
+
+        function renderPdfDisplay(pdf) {
+            return `
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <h4 class="font-medium">${pdf.title}</h4>
+                        ${pdf.description ? `<p class="text-sm text-gray-600 mt-1">${pdf.description}</p>` : ''}
+                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                            <span><i class="fas fa-file-pdf mr-1"></i>${pdf.original_name}</span>
+                            <span>${formatFileSize(pdf.size)}</span>
+                            <span>${formatDate(pdf.created_at)}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="viewPdf('${pdf.filename}')" class="p-2 text-blue-400 hover:text-blue-600">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button onclick="editPdf(${pdf.id})" class="p-2 text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deletePdf(${pdf.id})" class="p-2 text-red-400 hover:text-red-600">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderEditPdfForm(pdf) {
+            return `
+                <form onsubmit="updatePdf(event, ${pdf.id})" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Título</label>
+                        <input type="text" name="title" value="${pdf.title}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Descrição</label>
+                        <textarea name="description" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">${pdf.description || ''}</textarea>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                            Salvar
+                        </button>
+                        <button type="button" onclick="cancelEditPdf()" class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            `;
+        }
+
+        async function uploadPdf(formData) {
+            try {
+                await apiCall('/api/pdfs/standalone', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                showMessage('PDF enviado com sucesso!');
+                document.getElementById('pdfForm').reset();
+                loadStandalonePdfs();
+            } catch (error) {
+                showMessage('Erro ao enviar PDF: ' + error.message, 'error');
+            }
+        }
+
+        async function updatePdf(event, id) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                await apiCall(`/api/pdfs/standalone/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                showMessage('PDF atualizado com sucesso!');
+                currentEditingPdf = null;
+                loadStandalonePdfs();
+            } catch (error) {
+                showMessage('Erro ao atualizar PDF: ' + error.message, 'error');
+            }
+        }
+
+        async function deletePdf(id) {
+            if (!confirm('Tem certeza que deseja excluir este PDF?')) return;
+            
+            try {
+                await apiCall(`/api/pdfs/standalone/${id}`, { method: 'DELETE' });
+                showMessage('PDF removido com sucesso!');
+                loadStandalonePdfs();
+            } catch (error) {
+                showMessage('Erro ao remover PDF: ' + error.message, 'error');
+            }
+        }
+
+        function editPdf(id) {
+            currentEditingPdf = id;
+            loadStandalonePdfs();
+        }
+
+        function cancelEditPdf() {
+            currentEditingPdf = null;
+            loadStandalonePdfs();
+        }
+
+        function viewPdf(filename) {
+            window.open(`/static/uploads/pdfs/${filename}`, '_blank');
+        }
+
+        // Utility functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleString('pt-BR');
+        }
+
+        async function logout() {
+            try {
+                await apiCall('/api/auth/logout', { method: 'POST' });
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = '/login';
+            }
+        }
+
+        // Event listeners
+        document.getElementById('linkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            addLink(data);
+        });
+
+        document.getElementById('pdfForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            // Validate file
+            const file = formData.get('pdf');
+            if (!file || file.size === 0) {
+                showMessage('Por favor, selecione um arquivo PDF', 'error');
+                return;
+            }
+            
+            if (file.size > 16 * 1024 * 1024) {
+                showMessage('Arquivo muito grande. Máximo 16MB', 'error');
+                return;
+            }
+            
+            if (!file.type.includes('pdf')) {
+                showMessage('Por favor, selecione apenas arquivos PDF', 'error');
+                return;
+            }
+            
+            uploadPdf(formData);
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPortfolioLinks();
+            loadStandalonePdfs();
+        });
+    </script>
+</body>
+</html>
+
