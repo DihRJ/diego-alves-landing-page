@@ -7,6 +7,7 @@ class PortfolioLink(db.Model):
     url = db.Column(db.String(500), nullable=False)
     description = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(500), nullable=True)
+    pdf_url = db.Column(db.String(500), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
 
@@ -20,6 +21,7 @@ class PortfolioLink(db.Model):
             'url': self.url,
             'description': self.description,
             'image_url': self.image_url,
+            'pdf_url': self.pdf_url,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'is_active': self.is_active
         }
