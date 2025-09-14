@@ -86,3 +86,21 @@ def create_admin():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
+@auth_bp.route('/auth/change-password', methods=['POST'])
+@login_required
+def change_password():
+    data = request.get_json()
+    # Verify JSON contains required fields
+    if not data or 'old_password' not in data or 'new_password' not in data:
+        return jsonify({'error': 'Old and new passwords são obrigatórias'}), 400
+    # Get the currently logged in admin
+    admin = Admin.query.get(session['admin_id'])
+    # Check if the old password matches
+    if not admin or not admin.check_password(data['old_password']):
+        return jsonify({'error': 'Senha antiga incorreta'}), 401
+    # Set the new password
+    admin.set_password(data['new_password'])
+    # Commit the change to the database
+    db.session.commit()
+    return jsonify({'message': 'Senha alterada com sucesso'})
