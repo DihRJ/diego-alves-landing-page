@@ -49,11 +49,11 @@ def admin_panel():
     if static_folder_path is None:
         return "Static folder not configured", 404
     
-    admin_path = os.path.join(static_folder_path, 'admin-enhanced.html')
+    admin_path = os.path.join(static_folder_path, 'admin-v2.html')
     if os.path.exists(admin_path):
-        return send_from_directory(static_folder_path, 'admin-enhanced.html')
+        return send_from_directory(static_folder_path, 'admin-v2.html')
     else:
-        return "admin-enhanced.html not found", 404
+        return "admin-v2.html not found", 404
 
 @app.route('/login')
 def login_page():
@@ -62,11 +62,11 @@ def login_page():
     if static_folder_path is None:
         return "Static folder not configured", 404
     
-    admin_path = os.path.join(static_folder_path, 'admin-enhanced.html')
+    admin_path = os.path.join(static_folder_path, 'admin-v2.html')
     if os.path.exists(admin_path):
-        return send_from_directory(static_folder_path, 'admin-enhanced.html')
+        return send_from_directory(static_folder_path, 'admin-v2.html')
     else:
-        return "admin-enhanced.html not found", 404
+        return "admin-v2.html not found", 404
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
