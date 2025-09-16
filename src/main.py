@@ -17,7 +17,7 @@ from src.routes.portfolio_pdfs import portfolio_pdfs_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
-CORS(app, supports_credentials=True)
+CORS(app)
 
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(portfolio_bp, url_prefix='/api')
@@ -75,11 +75,11 @@ def home():
     if static_folder_path is None:
         return "Static folder not configured", 404
     
-    landing_path = os.path.join(static_folder_path, 'landing.html')
-    if os.path.exists(landing_path):
-        return send_from_directory(static_folder_path, 'landing.html')
+    index_path = os.path.join(static_folder_path, 'index.html')
+    if os.path.exists(index_path):
+        return send_from_directory(static_folder_path, 'index.html')
     else:
-        return "landing.html not found", 404
+        return "index.html not found", 404
 
 @app.route('/<path:path>')
 def serve_static(path):
