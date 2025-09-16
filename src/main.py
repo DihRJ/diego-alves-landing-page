@@ -68,16 +68,30 @@ def login_page():
     else:
         return "admin-v2.html not found", 404
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
+@app.route('/')
+def home():
+    """Rota para a landing page principal"""
     static_folder_path = app.static_folder
     if static_folder_path is None:
-            return "Static folder not configured", 404
+        return "Static folder not configured", 404
+    
+    index_path = os.path.join(static_folder_path, 'index.html')
+    if os.path.exists(index_path):
+        return send_from_directory(static_folder_path, 'index.html')
+    else:
+        return "index.html not found", 404
+
+@app.route('/<path:path>')
+def serve_static(path):
+    """Serve arquivos estáticos"""
+    static_folder_path = app.static_folder
+    if static_folder_path is None:
+        return "Static folder not configured", 404
 
     if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
         return send_from_directory(static_folder_path, path)
     else:
+        # Para rotas não encontradas, redireciona para a landing page
         index_path = os.path.join(static_folder_path, 'index.html')
         if os.path.exists(index_path):
             return send_from_directory(static_folder_path, 'index.html')
