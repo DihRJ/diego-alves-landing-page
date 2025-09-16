@@ -75,11 +75,11 @@ def home():
     if static_folder_path is None:
         return "Static folder not configured", 404
     
-    index_path = os.path.join(static_folder_path, 'index.html')
-    if os.path.exists(index_path):
-        return send_from_directory(static_folder_path, 'index.html')
+    landing_path = os.path.join(static_folder_path, 'landing.html')
+    if os.path.exists(landing_path):
+        return send_from_directory(static_folder_path, 'landing.html')
     else:
-        return "index.html not found", 404
+        return "landing.html not found", 404
 
 @app.route('/<path:path>')
 def serve_static(path):
