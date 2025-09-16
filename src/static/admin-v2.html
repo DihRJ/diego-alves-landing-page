@@ -270,8 +270,21 @@
         // API calls
         async function apiCall(url, options = {}) {
             try {
-                const response = await fetch(url, {
+                const defaultOptions = {
                     credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                };
+                
+                // Se for FormData, remover Content-Type para deixar o browser definir
+                if (options.body instanceof FormData) {
+                    delete defaultOptions.headers['Content-Type'];
+                }
+                
+                const response = await fetch(url, {
+                    ...defaultOptions,
                     ...options
                 });
                 
